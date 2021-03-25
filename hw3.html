@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+	</title>
+	<style>
+		button{
+			background-color: white;
+			border-radius:5px;
+			border: ridge;
+
+		}
+		button:hover{
+			transition:.2s;
+			transform: translate(-2px,-2px);
+			box-shadow: 2px 2px gray;
+		}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+		var staticUrl = window.location.href+"students.json";
+		var jsonData;
+		var request = new XMLHttpRequest();
+		request.open('GET',staticUrl);
+		request.onload = function() {
+			console.log("https://www.youtube.com/watch?v=rJesac0_Ftw");
+			console.log(request.responseText);
+			jsonData = JSON.parse(request.responseText);
+		}
+		request.send();
+		function update() {
+			request = $.ajax({
+			        url: "/~linwil000/ajax.php",
+			        type: "post",
+			        data: JSON.stringify(jsonData)
+			    });
+
+			    // Callback handler that will be called on success
+			    request.done(function (response, textStatus, jqXHR){
+			        // Log a message to the console
+			        console.log(response);
+			        console.log(textStatus);
+			        console.log("Hooray, it worked!");
+			    });
+			// request.open("POST", window.location.href+"ajax.php");
+			// request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			// // https://stackoverflow.com/questions/39519246/make-xmlhttprequest-post-using-json/39519299
+			// request.send(JSON.stringify(jsonData));
+			// alert(request.responseText);
+			return;
+			
+		}
+		$(document).ready(function(){
+
+			$("#list").click(function(){
+				var output = "";
+				for (entry in jsonData){
+					output += "\"" + entry + "\",\"" + jsonData[entry] + "\"" + "<br>"; 
+				}
+				$("#listp").html(output);
+			});
+			$("#search").click(function(){
+				var element = document.getElementById("searchInput");
+				var input = element.value;
+				if (input == null || input.length == 0){
+					alert("You must input a name");
+				}else{
+
+					var output = jsonData[input];
+					if(output == null || output.length == 0){
+						alert('No Entry Was Found');
+					}
+					$("#searchh").text("Hello, " + output);
+					element.value = "";
+
+				}
+			});
+			$("#add").click(function(){
+				var idelement = document.getElementById("addID");
+				var nameelement = document.getElementById("addName");
+				var id = idelement.value;
+				var name = nameelement.value;
+
+				if (id == null || id.length == 0 || name == null || name.length == 0){
+					alert("You musn't leave your Id or name blank");
+				}else if (jsonData[id] === name){
+					alert("Entry already exists!");
+				}else{
+					jsonData[id] = name;
+					alert("You have successfully added the entry into the students.json file");
+					update();
+				}
+				idelement.value = "";
+				nameelement.value = "";
+			});
+			$("#delete").click(function(){
+				var element = document.getElementById("deleteInput");
+				var input = element.value;
+
+
+				if (input == null || input.length == 0){
+					alert("Please enter a student ID to delete");
+				}else if(jsonData[input] == null){
+					alert("That entry was not found... please check your spelling and try again");
+				}else{
+					delete jsonData[input] == null
+					alert("You have successfully deleted an entry from the students.json file");
+					update();
+				}
+				element.value = "";
+			});
+		});
+		
+	</script>
+</head>
+<body>
+	<button id = "list">
+		list all students
+	</button>
+	<p id = "listp"><p><br>
+
+
+	<label>First name:</label>
+	<input type="text" id="searchInput"><br>
+	<button id = "search">
+	 	search specific student
+	 </button>
+	 <h1 id="searchh"></h1>
+	 <br><br>
+
+
+
+	 <label>student ID:</label>
+	 <input type="text" id="addID"><br>
+	 <label>student Name:</label>
+	 <input type="text" id="addName"><br>
+	 <button id = "add">
+	 	add new student
+	 </button>
+	 <br>
+	 <br>
+	 <br>
+
+
+
+
+	 <label>student ID:</label>
+	 <input type="text" id="deleteInput"><br>
+	 <button id = "delete">
+	 	delete specific student
+	 </button>
+
+</body>
+</html>
