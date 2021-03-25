@@ -1,154 +1,66 @@
+
 <!DOCTYPE html>
 <html>
-<head>
-	<title>
-	</title>
-	<style>
-		button{
-			background-color: white;
-			border-radius:5px;
-			border: ridge;
+  <head>
+    <title>http & ajax exercise</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.2.0/jsoneditor.min.js"></script><!-- AJAX -->
+  </head>
+  <body>
 
-		}
-		button:hover{
-			transition:.2s;
-			transform: translate(-2px,-2px);
-			box-shadow: 2px 2px gray;
-		}
-	</style>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script>
-		var staticUrl = window.location.href+"students.json";
-		var jsonData;
-		var request = new XMLHttpRequest();
-		request.open('GET',staticUrl);
-		request.onload = function() {
-			console.log("https://www.youtube.com/watch?v=rJesac0_Ftw");
-			console.log(request.responseText);
-			jsonData = JSON.parse(request.responseText);
-		}
-		request.send();
-		function update() {
-			request = $.ajax({
-			        url: "/~linwil000/ajax.php",
-			        type: "post",
-			        data: JSON.stringify(jsonData)
-			    });
+    <!-- Step 6 code goes here -->
+<!--
+ <form action="./step5" method="get">
+  first name: <input type="text" name="fname"><br>
+  last name: <input type="text" name="lname"><br>
+  <button type="submit">submit via get</button>
+</form>   -->   <!-- Step 7 code goes here -->
+<!--
+<form action="./step7" method="post">
+  first name: <input type="text" name="fname"><br>
+  last name: <input type="text" name="lname"><br>
+  <button type="submit">submit via post</button>
+</form>  -->
+    <!-- Step 8 code goes here -->
+<!--
+<form id="ajax-form">
+  first name: <input type="text" name="fname"><br>
+  last name: <input type="text" name="lname"><br>
+  <button type="submit">submit via ajax</button>
+</form>   -->   <!-- Step 10 code goes here -->
 
-			    // Callback handler that will be called on success
-			    request.done(function (response, textStatus, jqXHR){
-			        // Log a message to the console
-			        console.log(response);
-			        console.log(textStatus);
-			        console.log("Hooray, it worked!");
-			    });
-			// request.open("POST", window.location.href+"ajax.php");
-			// request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-			// // https://stackoverflow.com/questions/39519246/make-xmlhttprequest-post-using-json/39519299
-			// request.send(JSON.stringify(jsonData));
-			// alert(request.responseText);
-			return;
-			
-		}
-		$(document).ready(function(){
+<!--
+<div id="ajax-output"></div>
+-->
 
-			$("#list").click(function(){
-				var output = "";
-				for (entry in jsonData){
-					output += "\"" + entry + "\",\"" + jsonData[entry] + "\"" + "<br>"; 
-				}
-				$("#listp").html(output);
-			});
-			$("#search").click(function(){
-				var element = document.getElementById("searchInput");
-				var input = element.value;
-				if (input == null || input.length == 0){
-					alert("You must input a name");
-				}else{
+<button type="submit" id="list">list all students</button>
+<div id="output1"></div><br>
 
-					var output = jsonData[input];
-					if(output == null || output.length == 0){
-						alert('No Entry Was Found');
-					}
-					$("#searchh").text("Hello, " + output);
-					element.value = "";
+  <form id="form-search">
+    student ID: <input type="text" name="key"><br>
+    <button type="submit" id="search-list">search specific student</button>
+  </form>
+  <div id="output2"></div><br>
 
-				}
-			});
-			$("#add").click(function(){
-				var idelement = document.getElementById("addID");
-				var nameelement = document.getElementById("addName");
-				var id = idelement.value;
-				var name = nameelement.value;
+  <form id="add-form">
+    student ID: <input type="text" name="ID"><br>
+    student name: <input type="text" name="name"><br>
+    <button type="submit" id="add">add new student</button>
+  </form>
+  <br>
 
-				if (id == null || id.length == 0 || name == null || name.length == 0){
-					alert("You musn't leave your Id or name blank");
-				}else if (jsonData[id] === name){
-					alert("Entry already exists!");
-				}else{
-					jsonData[id] = name;
-					alert("You have successfully added the entry into the students.json file");
-					update();
-				}
-				idelement.value = "";
-				nameelement.value = "";
-			});
-			$("#delete").click(function(){
-				var element = document.getElementById("deleteInput");
-				var input = element.value;
+  <form id="delete-form">
+    student ID: <input type="text" name="ID"><br>
+    <button type="submit" id="delete">delete specific student</button>
+  </form>
 
-
-				if (input == null || input.length == 0){
-					alert("Please enter a student ID to delete");
-				}else if(jsonData[input] == null){
-					alert("That entry was not found... please check your spelling and try again");
-				}else{
-					delete jsonData[input] == null
-					alert("You have successfully deleted an entry from the students.json file");
-					update();
-				}
-				element.value = "";
-			});
-		});
-		
-	</script>
-</head>
-<body>
-	<button id = "list">
-		list all students
-	</button>
-	<p id = "listp"><p><br>
-
-
-	<label>First name:</label>
-	<input type="text" id="searchInput"><br>
-	<button id = "search">
-	 	search specific student
-	 </button>
-	 <h1 id="searchh"></h1>
-	 <br><br>
-
-
-
-	 <label>student ID:</label>
-	 <input type="text" id="addID"><br>
-	 <label>student Name:</label>
-	 <input type="text" id="addName"><br>
-	 <button id = "add">
-	 	add new student
-	 </button>
-	 <br>
-	 <br>
-	 <br>
-
-
-
-
-	 <label>student ID:</label>
-	 <input type="text" id="deleteInput"><br>
-	 <button id = "delete">
-	 	delete specific student
-	 </button>
-
-</body>
+<!--
+    <h1>this is your static file</h1>
+    <p>Here is something long that you don't want to put in js.</p>
+    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.</p>
+    <p>In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.</p>
+    <p>Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,</p>
+    -->
+    <script src="./exercise.js"></script>
+  </body>
 </html>
